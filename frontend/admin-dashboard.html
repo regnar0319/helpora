@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Helpora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="dashboard-body admin-theme">
+
+    <!-- Sidebar -->
+    <aside class="sidebar admin-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="admin-logo-text">Helpora <span>Admin</span></h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="overview-section"><i class="fas fa-tachometer-alt"></i>
+                Dashboard</a>
+            <a href="#" class="nav-item" data-section="users-section"><i class="fas fa-users"></i> Manage Users</a>
+            <a href="#" class="nav-item" data-section="professionals-section"><i class="fas fa-user-tie"></i>
+                Professionals</a>
+            <a href="#" class="nav-item" data-section="bookings-section"><i class="fas fa-calendar-check"></i>
+                Bookings</a>
+            <a href="#" class="nav-item" data-section="reports-section"><i class="fas fa-chart-line"></i> Reports</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="logout-btn" class="nav-item logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <h2 class="page-title" id="page-title">Dashboard Overview</h2>
+            <div class="top-bar-actions">
+                <div class="admin-profile">
+                    <span>Admin User</span>
+                    <div class="profile-pic">AD</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Sections -->
+
+        <!-- 1. Overview Section -->
+        <section id="overview-section" class="admin-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Users</h3>
+                        <p class="stat-value">12,450</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-user-tie"></i></div>
+                    <div class="stat-info">
+                        <h3>Professionals</h3>
+                        <p class="stat-value">845</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-calendar-check"></i></div>
+                    <div class="stat-info">
+                        <h3>Active Bookings</h3>
+                        <p class="stat-value">128</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Revenue</h3>
+                        <p class="stat-value">$142k</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Revenue Overview (Monthly)</h3>
+                <!-- Placeholder for Chart -->
+                <div class="mock-chart">
+                    <div class="bar" style="height: 40%" title="Jan"></div>
+                    <div class="bar" style="height: 55%" title="Feb"></div>
+                    <div class="bar" style="height: 48%" title="Mar"></div>
+                    <div class="bar" style="height: 65%" title="Apr"></div>
+                    <div class="bar" style="height: 80%" title="May"></div>
+                    <div class="bar" style="height: 75%" title="Jun"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Manage Users Section -->
+        <section id="users-section" class="admin-section">
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar-sm">JS</div>
+                                    <span>John Smith</span>
+                                </div>
+                            </td>
+                            <td>john.smith@example.com</td>
+                            <td>+1 (555) 123-4567</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td>
+                                <button class="btn-icon btn-warn" title="Suspend"><i class="fas fa-ban"></i></button>
+                                <button class="btn-icon btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar-sm">EW</div>
+                                    <span>Emma Watson</span>
+                                </div>
+                            </td>
+                            <td>emma.w@example.com</td>
+                            <td>+1 (555) 987-6543</td>
+                            <td><span class="badge badge-warning">Suspended</span></td>
+                            <td>
+                                <button class="btn-icon btn-success" title="Activate"><i
+                                        class="fas fa-check"></i></button>
+                                <button class="btn-icon btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <!-- More Rows... -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. Manage Professionals Section -->
+        <section id="professionals-section" class="admin-section">
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Professional</th>
+                            <th>Service</th>
+                            <th>Experience</th>
+                            <th>City</th>
+                            <th>Verification</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar-sm">MK</div>
+                                    <span>Mike K.</span>
+                                </div>
+                            </td>
+                            <td>Plumbing</td>
+                            <td>5 Years</td>
+                            <td>New York</td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-success">Approve</button>
+                                <button class="btn btn-sm btn-outline-danger">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar-sm">SL</div>
+                                    <span>Sarah Lee</span>
+                                </div>
+                            </td>
+                            <td>Electrical</td>
+                            <td>8 Years</td>
+                            <td>Brooklyn</td>
+                            <td><span class="badge badge-success">Verified</span></td>
+                            <td>
+                                <button class="btn-icon btn-danger" title="Revoke"><i class="fas fa-ban"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. Manage Bookings Section -->
+        <section id="bookings-section" class="admin-section">
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Professional</th>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#BK-2024</td>
+                            <td>Alice Smith</td>
+                            <td>Mike Johnson</td>
+                            <td>Plumbing</td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline">Reassign</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#BK-2023</td>
+                            <td>Bob Brown</td>
+                            <td>Sarah Lee</td>
+                            <td>Electrical</td>
+                            <td><span class="badge badge-success">Completed</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline" disabled>View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#BK-2022</td>
+                            <td>Charlie D.</td>
+                            <td>Unassigned</td>
+                            <td>Cleaning</td>
+                            <td><span class="badge badge-danger">Cancelled</span></td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5. Reports Section -->
+        <section id="reports-section" class="admin-section">
+            <div class="reports-container">
+                <div class="report-card">
+                    <h3>Monthly Revenue</h3>
+                    <div class="big-number">$45,200</div>
+                    <p class="trend positive"><i class="fas fa-arrow-up"></i> 12% vs last month</p>
+                </div>
+                <div class="report-card">
+                    <h3>Active Professionals</h3>
+                    <div class="big-number">642</div>
+                    <p class="trend positive"><i class="fas fa-arrow-up"></i> 5 new today</p>
+                </div>
+                <div class="report-card">
+                    <h3>Customer Satisfaction</h3>
+                    <div class="big-number">4.8/5</div>
+                    <p class="trend neutral"><i class="fas fa-minus"></i> Stable</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

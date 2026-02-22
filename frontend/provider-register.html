@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Pro - Helpora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="auth-body provider-auth-theme">
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="/index.html" class="logo-link">
+                    <img src="/Helpora_final_logo.png" alt="Helpora" class="auth-logo">
+                    <h2>Join as a Professional</h2>
+                </a>
+                <p>Grow your business with Helpora</p>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <a href="signup.html" class="btn btn-outline"
+                    style="flex: 1; text-align: center; border-radius: 8px; color: #6200ea; border-color: #6200ea;">As a
+                    User</a>
+                <a href="provider-register.html" class="btn btn-primary"
+                    style="flex: 1; text-align: center; border-radius: 8px;">As a Professional</a>
+            </div>
+
+            <form id="provider-register-form">
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="fullname" placeholder="John Doe" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="email">Email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" placeholder="email@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group half">
+                        <label for="phone">Phone</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" placeholder="(555) 123-4567" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Service Category</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-briefcase"></i>
+                        <select id="category" required>
+                            <option value="" disabled selected>Select your expertise...</option>
+                            <option value="Plumbing">Plumbing</option>
+                            <option value="Electrical">Electrical</option>
+                            <option value="Cleaning">Cleaning</option>
+                            <option value="AC Repair">AC Repair</option>
+                            <option value="Appliance Repair">Appliance Repair</option>
+                            <option value="Home Maintenance">Home Maintenance</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="experience">Experience (Years)</label>
+                        <input type="number" id="experience" min="0" placeholder="e.g. 5" required>
+                    </div>
+                    <div class="form-group half">
+                        <label for="city">City</label>
+                        <input type="text" id="city" placeholder="New York" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="Create a password" required>
+                        </div>
+                    </div>
+                    <div class="form-group half">
+                        <label for="confirm-password">Confirm Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirm-password" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id-upload">Upload ID / Certificate</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="id-upload" class="file-input">
+                        <span class="file-custom"><i class="fas fa-cloud-upload-alt"></i> Choose File...</span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary full-width">Register as Professional</button>
+                </div>
+
+                <div class="auth-footer">
+                    <p>Already registered? <a href="login.html">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+{
+    "buildCommand": "echo 'No build step required'",
+    "outputDirectory": "frontend",
+    "framework": null,
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/frontend/$1"
+        }
+    ]
+}

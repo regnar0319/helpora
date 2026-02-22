@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Dashboard - Helpora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="dashboard-body">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/Helpora_final_logo.png" alt="Helpora" class="sidebar-logo">
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="#" class="nav-item"><i class="fas fa-clipboard-list"></i> My Jobs</a>
+            <a href="#" class="nav-item"><i class="fas fa-wallet"></i> Earnings</a>
+            <a href="#" class="nav-item"><i class="fas fa-clock"></i> Availability</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="logout-btn" class="nav-item logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </aside>
+
+    <!-- Sidebar Backdrop -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <h2 class="page-title">Dashboard Overview</h2>
+            <div class="top-bar-actions">
+                <div class="availability-switch">
+                    <span>You are <strong id="status-text">Online</strong></span>
+                    <label class="switch">
+                        <input type="checkbox" id="availability-toggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="profile-pic">JD</div>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon purple"><i class="fas fa-briefcase"></i></div>
+                <div class="stat-info">
+                    <h3>Total Jobs</h3>
+                    <p class="stat-value">124</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <h3>Completed</h3>
+                    <p class="stat-value">118</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+                <div class="stat-info">
+                    <h3>Pending</h3>
+                    <p class="stat-value">2</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fas fa-dollar-sign"></i></div>
+                <div class="stat-info">
+                    <h3>Earnings</h3>
+                    <p class="stat-value">$4,250</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Service Section -->
+        <section class="create-service-section">
+            <h3 class="section-title">Manage Services</h3>
+            <div class="card">
+                <h4>Create New Service</h4>
+                <form id="create-service-form">
+                    <div class="form-group">
+                        <label for="service-name">Service Name</label>
+                        <input type="text" id="service-name" placeholder="e.g. Leaky Faucet Repair" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service-desc">Description</label>
+                        <textarea id="service-desc" rows="3"
+                            placeholder="Briefly describe what you offer..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="service-price">Price ($)</label>
+                            <input type="number" id="service-price" min="0" placeholder="50" required>
+                        </div>
+                        <div class="form-group half">
+                            <label for="service-category">Category</label>
+                            <select id="service-category" required>
+                                <option value="Plumbing">Plumbing</option>
+                                <option value="Electrical">Electrical</option>
+                                <option value="Cleaning">Cleaning</option>
+                                <option value="AC Repair">AC Repair</option>
+                                <option value="Appliance Repair">Appliance Repair</option>
+                                <option value="Home Maintenance">Home Maintenance</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submit-service-btn">Publish Service</button>
+                    <button type="button" class="btn btn-outline" id="cancel-edit-btn"
+                        style="display: none; margin-left: 10px;">Cancel Edit</button>
+                    <div id="service-msg" class="message"></div>
+                </form>
+            </div>
+
+            <!-- Published Services List -->
+            <div style="margin-top: 2rem;">
+                <h4>My Published Services</h4>
+                <div id="my-services-list" style="display: grid; gap: 1rem; margin-top: 1rem;">
+                    <!-- Services dynamically injected here -->
+                </div>
+                <!-- Incoming Bookings -->
+                <div style="margin-top: 3rem;">
+                    <h4>Incoming Bookings</h4>
+                    <div id="incoming-bookings-list" style="display: grid; gap: 1rem; margin-top: 1rem;">
+                        <!-- Bookings dynamically injected here -->
+                        <p>Loading incoming requests...</p>
+                    </div>
+                </div>
+        </section>
+        <div class="job-details">
+            <p><i class="fas fa-map-marker-alt"></i> 45 Park Avenue, Apt 12B</p>
+            <p><i class="fas fa-calendar-alt"></i> Today, 2:00 PM</p>
+        </div>
+        <div class="job-actions">
+            <button class="btn btn-outline reject-btn">Reject</button>
+            <button class="btn btn-primary accept-btn">Accept Job</button>
+        </div>
+        </div>
+
+        <!-- Job Card 2 -->
+        <div class="job-card">
+            <div class="job-header">
+                <div class="customer-info">
+                    <div class="customer-avatar">MK</div>
+                    <div>
+                        <h4>Mike Johnson</h4>
+                        <p>Leaky Faucet</p>
+                    </div>
+                </div>
+                <span class="job-price">$60 Est.</span>
+            </div>
+            <div class="job-details">
+                <p><i class="fas fa-map-marker-alt"></i> 12 Brooklyn Heights</p>
+                <p><i class="fas fa-calendar-alt"></i> Tomorrow, 10:00 AM</p>
+            </div>
+            <div class="job-actions">
+                <button class="btn btn-outline reject-btn">Reject</button>
+                <button class="btn btn-primary accept-btn">Accept Job</button>
+            </div>
+        </div>
+        </div>
+        </section>
+    </main>
+
+    <script src="/provider.js"></script>
+</body>
+
+</html>

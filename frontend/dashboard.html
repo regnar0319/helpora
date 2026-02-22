@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Helpora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Simple Dashboard Header -->
+    <header class="header dashboard-header">
+        <div class="navbar">
+            <div class="logo-container">
+                <a href="index.html">
+                    <img src="Helpora_final_logo.png" alt="Helpora Logo" class="logo">
+                </a>
+            </div>
+            <div class="nav-links">
+                <span id="user-display-name">Welcome, User</span>
+                <button id="logout-btn" class="btn btn-secondary btn-sm">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container dashboard-container">
+        <div class="dashboard-hero">
+            <h1>My Dashboard</h1>
+            <p>Manage your bookings and profile settings.</p>
+        </div>
+
+        <section class="dashboard-section">
+            <div class="section-header-row">
+                <h2>My Bookings</h2>
+                <a href="#services" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Book New
+                    Service</a>
+            </div>
+
+            <div class="bookings-list" id="customer-bookings-list">
+                <!-- Bookings dynamically rendered here -->
+                <p>Loading your bookings...</p>
+            </div>
+        </section>
+    </div>
+    <!-- Services Section (Embedded in Dashboard) -->
+    <section id="services" class="services section dashboard-section" style="padding-top: 0;">
+        <div class="section-header-row" style="margin-bottom: 2rem;">
+            <h2>Available Services</h2>
+            <p style="color: #6b7280; font-size: 0.95rem;">Choose a service below to create a new booking immediately.
+            </p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card" data-service="Plumbing" data-price="$49">
+                <div class="service-icon"><i class="fas fa-wrench"></i></div>
+                <h3>Plumbing</h3>
+                <p>Leak repairs, drain cleaning, and pipe installation.</p>
+                <div class="price-tag">Starts at $49</div>
+                <button class="btn btn-primary btn-sm book-now-trigger">Book Now</button>
+            </div>
+            <div class="service-card" data-service="Electrical" data-price="$59">
+                <div class="service-icon"><i class="fas fa-bolt"></i></div>
+                <h3>Electrical</h3>
+                <p>Wiring, switch replacement, and safety inspections.</p>
+                <div class="price-tag">Starts at $59</div>
+                <button class="btn btn-primary btn-sm book-now-trigger">Book Now</button>
+            </div>
+            <div class="service-card" data-service="Cleaning" data-price="$39">
+                <div class="service-icon"><i class="fas fa-broom"></i></div>
+                <h3>Cleaning</h3>
+                <p>Deep cleaning, move-in/out, and routine service.</p>
+                <div class="price-tag">Starts at $39</div>
+                <button class="btn btn-primary btn-sm book-now-trigger">Book Now</button>
+            </div>
+            <div class="service-card" data-service="AC Repair" data-price="$69">
+                <div class="service-icon"><i class="fas fa-snowflake"></i></div>
+                <h3>AC Repair</h3>
+                <p>Filter replacement, cooling fix, and maintenance.</p>
+                <div class="price-tag">Starts at $69</div>
+                <button class="btn btn-primary btn-sm book-now-trigger">Book Now</button>
+            </div>
+            <div class="service-card" data-service="Appliance Repair" data-price="$55">
+                <div class="service-icon"><i class="fas fa-tv"></i></div>
+                <h3>Appliance Repair</h3>
+                <p>Fix washing machines, fridges, and ovens.</p>
+                <div class="price-tag">Starts at $55</div>
+                <button class="btn btn-primary btn-sm book-now-trigger">Book Now</button>
+            </div>
+            <div class="service-card" data-service="Home Maintenance" data-price="$45">
+                <div class="service-icon"><i class="fas fa-hammer"></i></div>
+                <h3>Home Maintenance</h3>
+                <p>Furniture assembly, mounting, and general repairs.</p>
+                <div class="price-tag">Starts at $45</div>
+                <button class="btn btn-primary btn-sm book-now-trigger">Book Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal (Embedded) -->
+    <div id="booking-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2>Book Service</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-steps-text">
+                        <span class="step-text active">Service</span>
+                        <span class="step-text">Location</span>
+                        <span class="step-text">Time</span>
+                        <span class="step-text">Confirm</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="booking-form">
+                <div class="form-step active" data-step="1">
+                    <h3>Select Service</h3>
+                    <div class="form-group">
+                        <label for="service-select">Service Type</label>
+                        <select id="service-select" required>
+                            <option value="" disabled selected>Select a service...</option>
+                            <option value="Plumbing">Plumbing (Starts at $49)</option>
+                            <option value="Electrical">Electrical (Starts at $59)</option>
+                            <option value="Cleaning">Cleaning (Starts at $39)</option>
+                            <option value="AC Repair">AC Repair (Starts at $69)</option>
+                            <option value="Appliance Repair">Appliance Repair (Starts at $55)</option>
+                            <option value="Home Maintenance">Home Maintenance (Starts at $45)</option>
+                        </select>
+                    </div>
+                    <div class="form-actions right-align">
+                        <button type="button" class="btn btn-primary next-step">Next</button>
+                    </div>
+                </div>
+
+                <div class="form-step" data-step="2">
+                    <h3>Location Details</h3>
+                    <div class="form-group">
+                        <label for="address">Street Address</label>
+                        <input type="text" id="address" placeholder="123 Main St" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City / Area</label>
+                        <input type="text" id="city" placeholder="Brooklyn, NY" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary prev-step">Back</button>
+                        <button type="button" class="btn btn-primary next-step">Next</button>
+                    </div>
+                </div>
+
+                <div class="form-step" data-step="3">
+                    <h3>Date & Time</h3>
+                    <div class="form-group">
+                        <label for="date">Select Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Time Slot</label>
+                        <div class="time-slots-grid" id="time-slots">
+                            <button type="button" class="time-slot" data-time="08:00 AM">08:00 AM</button>
+                            <button type="button" class="time-slot" data-time="10:00 AM">10:00 AM</button>
+                            <button type="button" class="time-slot" data-time="12:00 PM">12:00 PM</button>
+                            <button type="button" class="time-slot" data-time="02:00 PM">02:00 PM</button>
+                            <button type="button" class="time-slot" data-time="04:00 PM">04:00 PM</button>
+                            <button type="button" class="time-slot" data-time="06:00 PM">06:00 PM</button>
+                        </div>
+                        <input type="hidden" id="selected-time" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary prev-step">Back</button>
+                        <button type="button" class="btn btn-primary next-step">Next</button>
+                    </div>
+                </div>
+
+                <div class="form-step" data-step="4">
+                    <h3>Review & Confirm</h3>
+                    <div class="booking-summary-card">
+                        <div class="summary-item"><span class="summary-label">Service</span><span class="summary-value"
+                                id="summary-service"></span></div>
+                        <div class="summary-item"><span class="summary-label">Location</span><span class="summary-value"
+                                id="summary-location"></span></div>
+                        <div class="summary-item"><span class="summary-label">Date & Time</span><span
+                                class="summary-value" id="summary-datetime"></span></div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-total"><span class="summary-label">Estimated Price</span><span
+                                class="summary-value price-highlight" id="summary-price"></span></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary prev-step">Back</button>
+                        <button type="submit" class="btn btn-primary btn-lg full-width">Confirm Booking</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px; padding: 2rem; border-radius: 12px;">
+            <span class="close-btn" id="close-payment-modal"
+                style="float: right; cursor: pointer; font-size: 1.5rem;">&times;</span>
+            <h2 style="margin-bottom: 1.5rem;">Secure Payment</h2>
+
+            <form id="payment-form">
+                <!-- Stripe Payment Element will be inserted here -->
+                <div id="payment-element"></div>
+
+                <button type="submit" id="submit-payment" class="btn btn-primary"
+                    style="width: 100%; margin-top: 1.5rem; padding: 0.8rem;">
+                    <span id="button-text">Pay Now</span>
+                </button>
+
+                <div id="payment-message" style="color: #ef4444; margin-top: 1rem; text-align: center; display: none;">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- External scripts -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
