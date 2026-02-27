@@ -12,6 +12,9 @@ const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
 
+// Trust the Render proxy to fix global Rate Limiter IP sharing bugs
+app.set('trust proxy', 1);
+
 // Global Middleware
 app.use(helmet({
     contentSecurityPolicy: {
@@ -30,7 +33,10 @@ app.use(helmet({
 app.use(compression()); // Compress all payload responses
 
 // Secure CORS Configuration
-const allowedOrigins = [process.env.CLIENT_URL].filter(Boolean);
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    'https://helpora-cqnm.onrender.com' // Explicitly whitelist Render frontend
+].filter(Boolean);
 
 if (process.env.NODE_ENV !== 'production') {
     allowedOrigins.push(
