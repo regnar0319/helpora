@@ -1,8 +1,9 @@
-// Helpora Provider Dashboard Logic
-// API Base URL - Dynamically set based on environment
+// provider.js - Logic for the Provider Dashboard
+
+// Dynamically Set Base URL
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
     ? 'http://localhost:5000'
-    : 'https://your-backend-app-name.onrender.com'; // Replace with your Render URL
+    : 'https://helpora-cqnm.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
 

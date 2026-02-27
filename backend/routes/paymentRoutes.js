@@ -7,6 +7,9 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.use(authMiddleware);
 
 // Create Stripe Payment Intent for a specific booking
-router.post('/create-intent', paymentController.createPaymentIntent);
+router.post('/create-payment-intent', paymentController.createPaymentIntent);
+
+// Confirm booking after payment success
+router.post('/confirm-booking', paymentController.confirmBooking);
 
 module.exports = router;

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment - Helpora</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        .payment-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .payment-header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .payment-header p {
+            color: #666;
+            font-size: 15px;
+        }
+
+        /* Stripe Element Styling Container */
+        #payment-element {
+            margin-bottom: 24px;
+            min-height: 200px;
+            /* Prevents layout shift */
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .submit-btn:hover {
+            background: #5b4dd6;
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            background: #a29bfe;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #payment-message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        #payment-message.error {
+            display: block;
+            background: #ffe3e3;
+            color: #e74c3c;
+            border: 1px solid #ffcccc;
+        }
+
+        #payment-message.success {
+            display: block;
+            background: #e3f8e5;
+            color: #2ecc71;
+            border: 1px solid #ccffcc;
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .payment-skeleton {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            color: #6c5ce7;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: opacity 0.2s;
+        }
+
+        .nav-back:hover {
+            opacity: 0.8;
+        }
+
+        .nav-back::before {
+            content: "←";
+            margin-right: 6px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <div class="payment-container">
+        <a href="dashboard.html" class="nav-back">Back to Dashboard</a>
+
+        <div class="payment-header">
+            <h1>Complete Your Payment</h1>
+            <p id="booking-details">Loading booking details...</p>
+        </div>
+
+        <form id="payment-form">
+            <div id="payment-element-skeleton" class="payment-skeleton"></div>
+            <div id="payment-element" style="display: none;">
+                <!-- Stripe Element will be inserted here -->
+            </div>
+
+            <button id="submit" class="submit-btn" disabled>
+                <div class="spinner" id="spinner"></div>
+                <span id="button-text">Pay Now</span>
+            </button>
+            <div id="payment-message"></div>
+        </form>
+    </div>
+
+    <script src="payment.js"></script>
+</body>
+
+</html>

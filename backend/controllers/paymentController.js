@@ -2,12 +2,12 @@ const stripe = require('../config/stripe');
 const { supabase } = require('../config/supabaseClient');
 
 // @desc    Create Stripe Payment Intent
-// @route   POST /api/payments/create-intent
-// @access  Private (Customer only)
+// @route   POST /api/payments/create-payment-intent
+// @access  Private
 exports.createPaymentIntent = async (req, res) => {
     try {
         const { booking_id } = req.body;
-        const customer_id = req.user.id;
+        const user_id = req.user.id;
 
         if (!booking_id) {
             return res.status(400).json({ error: 'booking_id is required' });
@@ -16,52 +16,28 @@ exports.createPaymentIntent = async (req, res) => {
         // 1. Fetch booking to verify existence and ownership
         const { data: booking, error: bookingError } = await supabase
             .from('bookings')
-            .select('*, services:service_id(price)')
+            .select('*')
             .eq('id', booking_id)
             .single();
 
         if (bookingError || !booking) {
-            // Note: If no service_id was ever saved to the booking table in previous iterations,
-            // we will need to adjust this. Assuming the schema links booking -> service -> price
             console.error('Booking fetch error:', bookingError);
-            return res.status(404).json({ error: 'Booking not found or missing relations' });
+            return res.status(404).json({ error: 'Booking not found' });
         }
 
         // 2. Verify Ownership
-        if (booking.customer_id !== customer_id) {
+        if (booking.user_id !== user_id) {
             return res.status(403).json({ error: 'Unauthorized: You do not own this booking' });
         }
 
-        // 3. Extract Price
-        // Assuming `bookings` table has a `service_id` foreign key linking to `services` table natively.
-        // If not, we will need to look up price differently.
-        let price = 0;
-
-        if (booking.services && booking.services.price) {
-            price = parseFloat(booking.services.price);
-        } else {
-            // Fallback: If `bookings` table doesn't have `service_id` explicitly linked but stores `service_type` 
-            // string, we must query `services` by `title` == `service_type` just to get a price.
-            // Let's attempt the fallback query to guarantee resilience against schema mutations:
-
-            const { data: serviceLink, error: fallbackError } = await supabase
-                .from('services')
-                .select('price')
-                .ilike('title', booking.service_type) // Matches "Plumbing" etc.
-                .limit(1)
-                .single();
-
-            if (!fallbackError && serviceLink) {
-                price = parseFloat(serviceLink.price);
-            }
-        }
-
-        if (isNaN(price) || price <= 0) {
-            return res.status(400).json({ error: 'Invalid or missing price for this service' });
+        // 3. Extract Amount
+        const amount = parseFloat(booking.amount);
+        if (isNaN(amount) || amount <= 0) {
+            return res.status(400).json({ error: 'Invalid or missing amount for this booking' });
         }
 
         // 4. Calculate Amount in Cents (Stripe constraint)
-        const amountInCents = Math.round(price * 100);
+        const amountInCents = Math.round(amount * 100);
 
         // 5. Create Payment Intent
         const paymentIntent = await stripe.paymentIntents.create({
@@ -69,22 +45,69 @@ exports.createPaymentIntent = async (req, res) => {
             currency: 'usd',
             metadata: {
                 booking_id: booking_id,
-                customer_id: customer_id
+                user_id: user_id
             },
-            // Note: In modern Stripe, automatic_payment_methods is ideal
             automatic_payment_methods: {
                 enabled: true,
             },
         });
 
-        // 6. Return client_secret to frontend natively
+        // 6. Return client_secret to frontend
         res.status(200).json({
-            clientSecret: paymentIntent.client_secret
+            clientSecret: paymentIntent.client_secret,
+            paymentIntentId: paymentIntent.id
         });
 
     } catch (error) {
         console.error('Stripe Payment Intent Error:', error);
         res.status(500).json({ error: 'Failed to create payment intent' });
+    }
+};
+
+// @desc    Confirm Booking
+// @route   POST /api/payments/confirm-booking
+// @access  Private
+exports.confirmBooking = async (req, res) => {
+    try {
+        const { payment_intent_id, booking_id } = req.body;
+        const user_id = req.user.id;
+
+        if (!payment_intent_id || !booking_id) {
+            return res.status(400).json({ error: 'payment_intent_id and booking_id are required' });
+        }
+
+        // 1. Retrieve the Payment Intent from Stripe to verify it succeeded
+        const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent_id);
+
+        if (paymentIntent.status !== 'succeeded') {
+            return res.status(400).json({ error: 'Payment not successful yet' });
+        }
+
+        // 2. Validate metadata matches
+        if (paymentIntent.metadata.booking_id !== booking_id || paymentIntent.metadata.user_id !== user_id) {
+            return res.status(400).json({ error: 'Payment intent does not match booking/user' });
+        }
+
+        // 3. Update the booking status in Supabase
+        const { error: updateError } = await supabase
+            .from('bookings')
+            .update({
+                status: 'confirmed',
+                payment_intent_id: payment_intent_id
+            })
+            .eq('id', booking_id)
+            .eq('user_id', user_id);
+
+        if (updateError) {
+            console.error('Supabase Update Error:', updateError);
+            return res.status(500).json({ error: 'Failed to update booking status' });
+        }
+
+        res.status(200).json({ message: 'Booking confirmed successfully' });
+
+    } catch (error) {
+        console.error('Confirm Booking Error:', error);
+        res.status(500).json({ error: 'Failed to confirm booking' });
     }
 };
 
@@ -98,14 +121,14 @@ exports.stripeWebhook = async (req, res) => {
     let event;
 
     try {
-        // Construct the event using the raw body buffer provided by `express.raw()` in server.js
+        // Construct the event using the raw body buffer
         event = stripe.webhooks.constructEvent(req.body, signature, endpointSecret);
     } catch (err) {
         console.error(`⚠️  Webhook signature verification failed.`, err.message);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // Handle exactly the target event
+    // Handle payment_intent.succeeded
     if (event.type === 'payment_intent.succeeded') {
         const paymentIntent = event.data.object;
         const booking_id = paymentIntent.metadata.booking_id;
@@ -113,26 +136,25 @@ exports.stripeWebhook = async (req, res) => {
         console.log(`💰 PaymentIntent status: ${paymentIntent.status} for Booking ID: ${booking_id}`);
 
         if (booking_id) {
-            // Update the booking explicitly tracking financial commitments
-            // Assumes a column `payment_status` exists on `bookings` (defaults to pending/null normally)
+            // Update the booking status to confirmed
             const { error: updateError } = await supabase
                 .from('bookings')
-                .update({ payment_status: 'paid' })
+                .update({
+                    status: 'confirmed',
+                    payment_intent_id: paymentIntent.id
+                })
                 .eq('id', booking_id);
 
             if (updateError) {
-                console.error(`Error updating booking payment status for ${booking_id}:`, updateError);
-                // Important: returning 500 tells Stripe to strictly retry delivery
+                console.error(`Error updating booking status for ${booking_id}:`, updateError);
                 return res.status(500).json({ error: 'Database update failed processing payment' });
             }
 
-            console.log(`✅ Booking ${booking_id} accurately marked as definitively paid.`);
+            console.log(`✅ Booking ${booking_id} accurately marked as confirmed.`);
         }
     } else {
-        // Log unhandled events gracefully
         console.log(`Unhandled event type ${event.type}`);
     }
 
-    // Acknowledge receipt natively giving Stripe a fast 200 OK Response
     res.status(200).json({ received: true });
 };
