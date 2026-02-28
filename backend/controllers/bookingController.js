@@ -14,6 +14,7 @@ exports.createBooking = async (req, res) => {
             .insert([
                 {
                     customer_id: req.user.id,
+                    user_id: req.user.id,
                     service_type: serviceType,
                     scheduled_date: scheduledDate,
                     professional_id: professionalId || null // Optional initial assignment
