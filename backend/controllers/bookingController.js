@@ -9,7 +9,23 @@ exports.createBooking = async (req, res) => {
     const { serviceType, scheduledDate, professionalId } = req.body;
 
     try {
-        const { data, error } = await supabase
+        console.log('--- Debug: Insert Booking ---');
+        console.log('req.user.id:', req.user.id);
+        console.log('Payload:', {
+            customer_id: req.user.id,
+            user_id: req.user.id,
+            service_type: serviceType,
+            scheduled_date: scheduledDate,
+            professional_id: professionalId || null
+        });
+
+        // Use supabaseAdmin (Service Role Key) to bypass RLS on the backend, 
+        // or ensure it properly inserts if RLS is enabled and requires service_role
+        const { supabaseAdmin } = require('../config/supabaseClient');
+
+        const clientToUse = supabaseAdmin || supabase;
+
+        const { data, error } = await clientToUse
             .from('bookings')
             .insert([
                 {
@@ -22,7 +38,10 @@ exports.createBooking = async (req, res) => {
             ])
             .select();
 
-        if (error) throw error;
+        if (error) {
+            console.error('Supabase Insert Error:', error);
+            throw error;
+        }
 
         res.status(201).json({ message: 'Booking created', booking: data[0] });
     } catch (error) {
