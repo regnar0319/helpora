@@ -6,7 +6,11 @@ exports.createBooking = async (req, res) => {
         return res.status(403).json({ error: 'Only customers can create bookings' });
     }
 
-    const { serviceType, scheduledDate, professionalId } = req.body;
+    const { serviceType, scheduledDate, professionalId, address, city } = req.body;
+
+    if (!address) {
+        return res.status(400).json({ error: 'Address is required to create a booking' });
+    }
 
     try {
         console.log('--- Debug: Insert Booking ---');
@@ -16,7 +20,9 @@ exports.createBooking = async (req, res) => {
             user_id: req.user.id,
             service_type: serviceType,
             scheduled_date: scheduledDate,
-            professional_id: professionalId || null
+            professional_id: professionalId || null,
+            address,
+            city
         });
 
         // Use supabaseAdmin (Service Role Key) to bypass RLS on the backend, 
@@ -33,7 +39,9 @@ exports.createBooking = async (req, res) => {
                     user_id: req.user.id,
                     service_type: serviceType,
                     scheduled_date: scheduledDate,
-                    professional_id: professionalId || null // Optional initial assignment
+                    professional_id: professionalId || null, // Optional initial assignment
+                    address: address,
+                    city: city || null
                 }
             ])
             .select();

@@ -399,7 +399,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         serviceType: bookingData.service,
-                        scheduledDate: scheduledDate
+                        scheduledDate: scheduledDate,
+                        address: bookingData.address,
+                        city: bookingData.city
                     })
                 });
 
