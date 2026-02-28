@@ -19,7 +19,7 @@ exports.createBooking = async (req, res) => {
             customer_id: req.user.id,
             user_id: req.user.id,
             service_type: serviceType,
-            scheduled_date: scheduledDate,
+            booking_date: scheduledDate,
             professional_id: professionalId || null,
             address,
             city
@@ -38,7 +38,7 @@ exports.createBooking = async (req, res) => {
                     customer_id: req.user.id,
                     user_id: req.user.id,
                     service_type: serviceType,
-                    scheduled_date: scheduledDate,
+                    booking_date: scheduledDate,
                     professional_id: professionalId || null, // Optional initial assignment
                     address: address,
                     city: city || null
