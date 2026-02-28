@@ -7,14 +7,21 @@ const authMiddleware = async (req, res, next) => {
         return res.status(401).json({ error: 'No token provided' });
     }
 
+    console.log('--- Debug: Auth Middleware ---');
+    console.log('Received Token:', token.substring(0, 15) + '...');
+
     try {
+        // Verify the token natively using Supabase (which securely validates the JWT signature)
         const { data: { user }, error } = await supabase.auth.getUser(token);
 
         if (error || !user) {
+            console.error('Token Verification Error:', error?.message);
             return res.status(401).json({ error: 'Invalid token' });
         }
 
-        // Fetch user role from profiles using Admin to bypass RLS on backend
+        console.log('Decoded User ID:', user.id);
+
+        // Fetch user role from profiles using Admin to bypass RLS on backend lookups
         const clientToUse = supabaseAdmin || supabase;
         const { data: profile, error: profileError } = await clientToUse
             .from('profiles')
@@ -35,6 +42,7 @@ const authMiddleware = async (req, res, next) => {
         };
         next();
     } catch (err) {
+        console.error('Auth Middleware Exception:', err);
         res.status(401).json({ error: 'Authentication failed' });
     }
 };
